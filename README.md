@@ -156,9 +156,7 @@ void slider()
 }
 
 
-// pierwsze podejscie - zostawiam sobie pod inzynierska
-/*
- * BLYNK_WRITE(button2_vpin) {  
+BLYNK_WRITE(button2_vpin) {  
 mode2_button = param.asInt(); // bool zmien 
 if(mode2_button == HIGH) {
   Serial.println(" wlaczono tryb auto - ustaw czas podlania ");
