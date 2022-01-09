@@ -328,8 +328,7 @@ void loop()
 {
   Blynk.run(); // funkcje wbudowane z bibl z blynk
   timer.run(); // https://community.blynk.cc/t/using-blynktimer-or-simpletimer/53326
-  // You can inject your own code or combine it with other sketches.
-  // Check other examples on how to communicate with Blynk. Remember
+ timer.setInterval(1250L, myTimerEvent);
     //update button states || wysyla wartosc z kodu arduino do widzetu w blynk
   Blynk.virtualWrite(button1_vpin, mode1_button);
   Blynk.virtualWrite(button2_vpin, mode2_button);
