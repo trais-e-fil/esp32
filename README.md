@@ -25,20 +25,9 @@ char pass[] = "";
 
 BlynkTimer timer; 
 
-int check_water_lvl_ID; //https://community.blynk.cc/t/using-blynktimer-or-simpletimer/53326
 
-//long time_to_wait; // 3 seconds // test -- Using variables instead of hard-coded numbers
-
-// DOBRA PROJEKT NA JAKICH PINACH TO ROBIE 
-//relay jest na 16 czyli 8pin z prawej
-//sensor jest 39 czyli 16pin z lewej
-//i tak WAZNE dajesz zasilanie 3,3V bo inaczej nie  pojdzie ito jest 19pin z lewej
-
-// ktore piny 
-//https://randomnerdtutorials.com/esp32-pinout-reference-gpios/
-
-#define relay1_pin 16 // pompa // na plytce to 5 pin z lewej
-#define sensor 39 // czujnik na analogu // 11 pin z lewej //define analog input pin number connected to moisture sensor
+#define relay1_pin 16 // pompa 
+#define sensor 39 // czujnik 
 
 const int dry = 3450; //warosc kiedy jest suchy - stan na procent
 const int mid = 3000; // wartosc na warunek // dostosuj go potem do innej wartosci
@@ -59,8 +48,6 @@ int output = 0; // stan do procentow ale narazie nie uzyte
 int pinValue = 0; // stan do v4 czyli mienika
 int sensorVal = 0; // stan na analog do esp na czujnik
 
-
-// https://community.blynk.cc/t/using-blynktimer-or-simpletimer/53326 important to timer setup
 
 //Change the virtual pins according the rooms
 #define button1_vpin    V1 // 1st mode on/off
@@ -84,14 +71,12 @@ BLYNK_CONNECTED() {
 // This function is called every time the Virtual Pin state change
 //i.e when web push switch from Blynk App or Web Dashboard
 
-/*## inz
-//  nie kompiluje sie przez to nie dodawaj tego -- to tez napisz do inz ze myslales ze trzeba xd
+
 BLYNK_CONNECTED() {
     Blynk.syncAll();
 }
-*/
 
-/*
+
 BLYNK_WRITE(button1_vpin) // https://www.youtube.com/watch?v=UBQCaxfeBKY // chlep
   { 
      
@@ -120,38 +105,7 @@ if(mode1_button == HIGH) {// jesli przycisk on/off jest wcisniety
     }
  // }
   }
-*/
-// orginal trybu 1 ---- zostaw to sobie byc w inz mogl pisac ze tak myslales zle na poczatku itp 
 
-//--------------------------------------------------------------------------
-//############## code for mode 1 ###########################################
-
-BLYNK_WRITE(button1_vpin) // https://www.youtube.com/watch?v=UBQCaxfeBKY // chlep
-  { 
-    
-    mode1_button = param.asInt(); // bool
-    
-    if(mode1_button == 1) {// jesli przycisk on/off jest wcisniety
-        modeone(); // wywolanie funkcji wlaczajacej tryb 1 i led 
-    }
-
-    if(mode1_button == 0)
-    {
-  digitalWrite(relay1_pin, mode1_button); // wylaczam pompe . relay1_state or LOW
-  Blynk.virtualWrite(button4_vpin, LOW); // wygaszam led 
-  Serial.println("tryb 1 wylaczony");
-    }
-    
-  }
-//--------------------------------------------------------------------------
-void modeone() // pelta co 100mils na tryb 1
-{
- 
-        digitalWrite(relay1_pin, mode1_button); // wlaczam pompke 
-        Blynk.virtualWrite(button4_vpin, HIGH); // zapalam led - tez
-        Serial.println("tryb 1 wlaczony");
-        
-}
 //############## code for mode 1 ###########################################
 //--------------------------------------------------------------------------
 //############## code for mode 2 ###########################################
@@ -240,7 +194,6 @@ slider();
   Blynk.virtualWrite(button3_vpin, LOW); // wylacza slider do pozycji poczatkowej ZERO heh
     }
 }
-*/
 
 //############## code for mode 2 ###########################################
 //--------------------------------------------------------------------------
@@ -350,49 +303,14 @@ void myTimerEvent() // wyswietla dane z czujnika na miernik co 1.25 sek
  
   //Blynk.virtualWrite(button5_vpin, output); // pokazuje na mierniku w procentach
 
-} // to co zle do inzynierskiej ze bledy
- /*
-  if(relay3_state == 1) { // przycisk tryb 3 jest wlaczony
-  Serial.println(" wlaczono tryb czujnika gleby ");
-  //delay(500); // zeby w konsoli nie bylo za szybko
-  //------------------------------------------------------------ zaczecie czego kolwiek w tej funkcji
-// to olej chyba i dodaj ten warunek do petli
-    if (sensorVal >= mid){
-      // sensorVal = param.asInt();
-     // soil_loop();// wywolanie funkcji -- sprawdz warunek
-      sendSensor();
-        }
-    
-    else{
-        digitalWrite(relay1_pin, LOW); // wylaczasz pompe 
-  // info w konsoli
-  Serial.print("lutriush zostal podlany i ma luz ");
-  Serial.println(sensorVal);
-  //delay(1500);
-  Blynk.virtualWrite(button6_vpin, LOW);
-    }
-      }
- 
-   //------------------------------------------------------------- koniec 
-    if(relay3_state == 0){
-    Serial.println(" wylaczono tryb czujnika gleby ");
-  }
 }
-*/
-//#### code for mode 3##################################################### code for mode 3
-//--------------------------------------------------------------------------
 
-// to odpuszczam chyba bo nie musze tego pisac
-// -------------------------------------------------- //  z czujnikiem wilgotonosci v5
-//BLYNK_WRITE(button5_vpin) {  // part 1 https://www.youtube.com/watch?v=IvzBPXqyUm4  part 2 https://www.youtube.com/watch?v=xyM2RECZBTo
- // test na potencjometrze https://randomnerdtutorials.com/esp32-adc-analog-read-arduino-ide/
+//#### code for mode 3##################################################### code for mode 3
 //--------------------------------------------------------------------------
 void setup()
 {
   // Debug console
   Serial.begin(115200);
-  //--------------------------------------------------------------------
- //  pinMode(button1_pin, INPUT_PULLUP);  nieuzywam jednak
   //--------------------------------------------------------------------
   pinMode(relay1_pin, OUTPUT);
   pinMode(sensor, OUTPUT);
@@ -400,27 +318,13 @@ void setup()
   //During Starting all Relays should TURN OFF
   digitalWrite(relay1_pin, HIGH);
   digitalWrite(sensor, HIGH);
-  //--------------------------------------------------------------------
-  //https://github.com/blynkkk/blynk-library/blob/master/examples/GettingStarted/PushData/PushData.ino#L30
-  // Setup a function to be called every second
-  timer.setTimeout(3600000L, [] () {} ); // dummy/sacrificial Function // https://community.blynk.cc/t/using-blynktimer-or-simpletimer/53326
-  timer.setInterval(1250L, myTimerEvent);
-  check_water_lvl_ID = timer.setInterval(2250L, check_water_lvl); //Disabling/Enabling a timer to achieve the same result  https://community.blynk.cc/t/using-blynktimer-or-simpletimer/53326
    //--------------------------------------------------------------------
   Blynk.begin(auth, ssid, pass);
   // You can also specify server:
   //Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
   //Blynk.begin(auth, ssid, pass, IPAddress(192,168,1,100), 8080);
   //--------------------------------------------------------------------
-  //update button states || wysyla wartosc z kodu arduino do widzetu w blynk
-  Blynk.virtualWrite(button1_vpin, mode1_button);
-  Blynk.virtualWrite(button2_vpin, mode2_button);
-  Blynk.virtualWrite(button3_vpin, mode2_button);
-  Blynk.virtualWrite(button4_vpin, pinValue);
-  Blynk.virtualWrite(button5_vpin, mode1_button);
-  //--------------------------------------------------------------------
-}// https://docs.blynk.io/en/legacy-platform/legacy-articles/how-to-display-any-sensor-data-in-blynk-app info do inz
-// esp32 pinout https://www.instructables.com/ESP32-Internal-Details-and-Pinout/
+
 
 void loop()
 {
@@ -428,7 +332,12 @@ void loop()
   timer.run(); // https://community.blynk.cc/t/using-blynktimer-or-simpletimer/53326
   // You can inject your own code or combine it with other sketches.
   // Check other examples on how to communicate with Blynk. Remember
-  // to avoid delay() function!
-  // keep loop clean  https://docs.blynk.io/en/legacy-platform/legacy-articles/keep-your-void-loop-clean --- info do opisow inzynierskiej co i jak
+    //update button states || wysyla wartosc z kodu arduino do widzetu w blynk
+  Blynk.virtualWrite(button1_vpin, mode1_button);
+  Blynk.virtualWrite(button2_vpin, mode2_button);
+  Blynk.virtualWrite(button3_vpin, mode2_button);
+  Blynk.virtualWrite(button4_vpin, pinValue);
+  Blynk.virtualWrite(button5_vpin, mode1_button);
+  //--------------------------------------------------------------------
   }
   ```
